@@ -16,7 +16,7 @@
 #begin Map/GroupProject.tmx
 /copy:Map/GroupProject.tmx
 
-#begin TileSheet/roguelikeSheet_transparent.png
+#begin Tilesheet.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -26,5 +26,5 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:TileSheet/roguelikeSheet_transparent.png
+/build:Tilesheet.png
 

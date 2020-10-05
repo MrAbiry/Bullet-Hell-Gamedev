@@ -34,15 +34,15 @@ namespace BulletHellGame
             mouseStatePrevious = mouseState;
             mouseState = Mouse.GetState();
         }
-        private bool IsMouseJustPressed(Keys key)
+        private bool IsMouseJustPressed()
         {
             return (mouseState.LeftButton == ButtonState.Pressed & mouseState != mouseStatePrevious); //checks to see if key is being pressed, and if this is different to previous Update()
         }
-        private bool IsMouseHeld(Keys key)
+        private bool IsMouseHeld()
         {
             return (mouseState.LeftButton == ButtonState.Pressed & mouseState == mouseStatePrevious); //checks to see if a key is being pressed, and if this is different to previous Update()
         }
-        private bool IsMouseReleased(Keys key)
+        private bool IsMouseReleased()
         {
             return (mouseStatePrevious.LeftButton == ButtonState.Pressed & mouseState.LeftButton == ButtonState.Pressed);
         }

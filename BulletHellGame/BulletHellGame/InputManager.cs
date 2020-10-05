@@ -26,6 +26,15 @@ namespace BulletHellGame
             keyboardState = Keyboard.GetState();
             keyboardStatePrevious = Keyboard.GetState(); //i called .getState() again because I know with some classes, if you do b=c and then a=b it turns it into a reference? not sure if it's the case here and cba to check
             UseWASDKeys(); //sets default movement keys to WASD;
+            
+        }
+        private void DebugLog()
+        {
+            System.Text.StringBuilder sb = new StringBuilder();
+            foreach (var key in keyboardState.GetPressedKeys())
+                sb.Append("Key: ").Append(key).Append(" pressed ");
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                sb.Append("Mouse: ").Append(mouseState.LeftButton).Append(" pressed");
         }
         public void Update()
         {
@@ -33,6 +42,8 @@ namespace BulletHellGame
             keyboardState = Keyboard.GetState();
             mouseStatePrevious = mouseState;
             mouseState = Mouse.GetState();
+
+            DebugLog();
         }
         private bool IsMouseJustPressed()
         {

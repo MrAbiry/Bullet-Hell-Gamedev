@@ -1,14 +1,21 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace BulletHellGame
 {
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-
+        private SpriteBatch spriteBatch;
+        
+        //map handling
+        Texture2D tileset;
+        int tileWidth;
+        int tileHeight;
+        int tilesetTilesWide;
+        int tilesetTilesHigh;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -25,8 +32,7 @@ namespace BulletHellGame
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            spriteBatch = new SpriteBatch(GraphicsDevice);
             // TODO: use this.Content to load your game content here
         }
 
@@ -42,8 +48,6 @@ namespace BulletHellGame
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);

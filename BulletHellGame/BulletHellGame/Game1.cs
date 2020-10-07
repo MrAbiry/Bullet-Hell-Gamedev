@@ -1,13 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+using System;
 using TiledSharp;
+
 namespace BulletHellGame
 {
     public class Game1 : Game
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        private GraphicsDeviceManager graphics;
+        private SpriteBatch spriteBatch;
+        private Texture2D playerTexture;
+        private SpriteSheet playerSpriteSheet;
+
 
         private TmxMap map;
         private Texture2D tileset;
@@ -18,7 +24,7 @@ namespace BulletHellGame
         private TileMapRenderer mapRenderer;
         public Game1()
         {
-            _graphics = new GraphicsDeviceManager(this);
+            graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -32,7 +38,9 @@ namespace BulletHellGame
 
         protected override void LoadContent()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            playerTexture = Content.Load<Texture2D>("Player");
+            playerSpriteSheet = new SpriteSheet(playerTexture, 1, 6);
             map = new TmxMap("Content/Map/GroupProject.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
 
@@ -47,9 +55,9 @@ namespace BulletHellGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
+            playerSpriteSheet.Update();
             // TODO: Add your update logic here
-
+            
             base.Update(gameTime);
         }
 
@@ -57,8 +65,7 @@ namespace BulletHellGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             mapRenderer.Draw(_spriteBatch,map,tileset,tilesetTilesWide,tileWidth,tileHeight);
-            // TODO: Add your drawing code here
-
+            playerSpriteSheet.Draw(spriteBatch, new Vector2(50, 50));
             base.Draw(gameTime);
         }
     }

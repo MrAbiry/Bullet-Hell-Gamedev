@@ -13,10 +13,14 @@
 
 #---------------------------------- Content ---------------------------------#
 
+
+#begin Player.png
+
 #begin Map/GroupProject.tmx
 /copy:Map/GroupProject.tmx
 
 #begin Tilesheet.png
+
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -26,5 +30,9 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+
+/build:Player.png
+
 /build:Tilesheet.png
+
 

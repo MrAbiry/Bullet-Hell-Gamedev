@@ -9,29 +9,16 @@ namespace BulletHellGame
 {
    public class InputManager
     {
-        //current and previous key press:
+        //current and previous key/mouse press:
         KeyboardState keyboardState;
         KeyboardState keyboardStatePrevious; //used to keep track of whether button is being pressed or held. the keyboardState of previous update
+        MouseState mouseState;
+        MouseState mouseStatePrevious;
         //movement controls
-        Keys UpMove;
-        Keys DownMove;
-        Keys LeftMove;
-        Keys RightMove;
-        //movestates
-        enum Movestate
-        {
-            None,
-            Up,
-            Down,
-            Left,
-            Right,
-            DiagonalUpRight, //8-way movement
-            DiagonalUpLeft,
-            DiagonalDownLeft,
-            DiagonalDownRight
-        }
-        public int movestate = (int)Movestate.None;
-        //other:
+        Keys upMove;
+        Keys downMove;
+        Keys leftMove;
+        Keys rightMove;
         int idleTime = 0; // time where no key at all has been pressed
 
         public InputManager()
@@ -39,14 +26,37 @@ namespace BulletHellGame
             keyboardState = Keyboard.GetState();
             keyboardStatePrevious = Keyboard.GetState(); //i called .getState() again because I know with some classes, if you do b=c and then a=b it turns it into a reference? not sure if it's the case here and cba to check
             UseWASDKeys(); //sets default movement keys to WASD;
+            
+        }
+        private void DebugLog()
+        {
+            System.Text.StringBuilder sb = new StringBuilder();
+            foreach (var key in keyboardState.GetPressedKeys())
+                sb.Append("Key: ").Append(key).Append(" pressed ");
+            if (mouseState.LeftButton == ButtonState.Pressed)
+                sb.Append("Mouse: ").Append(mouseState.LeftButton).Append(" pressed");
         }
         public void Update()
         {
             keyboardStatePrevious = keyboardState;
             keyboardState = Keyboard.GetState();
-            DetectMoveState();
-        }
+            mouseStatePrevious = mouseState;
+            mouseState = Mouse.GetState();
 
+            DebugLog();
+        }
+        private bool IsMouseJustPressed()
+        {
+            return (mouseState.LeftButton == ButtonState.Pressed & mouseState != mouseStatePrevious); //checks to see if key is being pressed, and if this is different to previous Update()
+        }
+        private bool IsMouseHeld()
+        {
+            return (mouseState.LeftButton == ButtonState.Pressed & mouseState == mouseStatePrevious); //checks to see if a key is being pressed, and if this is different to previous Update()
+        }
+        private bool IsMouseReleased()
+        {
+            return (mouseStatePrevious.LeftButton == ButtonState.Pressed & mouseState.LeftButton == ButtonState.Pressed);
+        }
         private bool IsKeyJustPressed(Keys key)
         {
             return (keyboardState.IsKeyDown(key) & keyboardState != keyboardStatePrevious); //checks to see if key is being pressed, and if this is different to previous Update()
@@ -78,63 +88,35 @@ namespace BulletHellGame
             }
             else return false;
         }
-        private void DetectMoveState()
-        {
-            if (keyboardState.IsKeyDown(Keys.None))
-            { 
-                movestate = (int)Movestate.None;
-                if(IsPlayerIdle())
-                { 
-                    //raise event here
-                }
-            }
-            bool moveup = keyboardState.IsKeyDown(UpMove);
-            bool moveright = keyboardState.IsKeyDown(RightMove);
-            bool movedown = keyboardState.IsKeyDown(DownMove);
-            bool moveleft = keyboardState.IsKeyDown(LeftMove);
-            
-            if (moveup)
-            {
-                if (moveright) //if both up and right keys are pressed at same time
-                    movestate = (int)Movestate.DiagonalUpRight;
-                else if (moveleft)
-                    movestate = (int)Movestate.DiagonalUpLeft;
-                else movestate = (int)Movestate.Up;
-            }
-            else if (movedown)
-            {
-                if (moveright)
-                    movestate = (int)Movestate.DiagonalDownRight;
-                else if (moveleft)
-                    movestate = (int)Movestate.DiagonalDownLeft;
-                else movestate = (int)Movestate.Down;
-            }
-            else if (moveright)
-                movestate = (int)Movestate.Right;
-            else if (moveleft)
-                movestate = (int)Movestate.Left;
-        }
 
-        //
-        //
-        //
-        public int GetMoveState()
+       public Vector2 GetPlayerMoveDirection()
         {
-            return movestate;
+            int moveX = 0;
+            int moveY = 0;
+            if (keyboardState.IsKeyDown(upMove))
+                moveY -= 1;
+            if (keyboardState.IsKeyDown(downMove))
+                moveY += 1;
+            if (keyboardState.IsKeyDown(leftMove))
+                moveX += 1;
+            if (keyboardState.IsKeyDown(rightMove))
+                moveX -= 1;
+            return new Vector2(moveX, moveY);
+
         }
         public void UseWASDKeys() //method to change controls to WASD keys
         {
-            UpMove = Keys.W;
-            DownMove = Keys.S;
-            LeftMove = Keys.A;
-            RightMove = Keys.D;
+            upMove = Keys.W;
+            downMove = Keys.S;
+            leftMove = Keys.A;
+            rightMove = Keys.D;
         }
         public void UseArrowKeys() //method to change controls to arrow keys
         {
-            UpMove = Keys.Up;
-            DownMove = Keys.Down;
-            LeftMove = Keys.Left;
-            RightMove = Keys.Right;
+            upMove = Keys.Up;
+            downMove = Keys.Down;
+            leftMove = Keys.Left;
+            rightMove = Keys.Right;
         }
     }
 }

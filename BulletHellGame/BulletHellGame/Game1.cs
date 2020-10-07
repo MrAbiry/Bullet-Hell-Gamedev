@@ -10,7 +10,7 @@ namespace BulletHellGame
     public class Game1 : Game
     {
         private GraphicsDeviceManager graphics;
-        private SpriteBatch spriteBatch;
+        private SpriteBatch _spriteBatch;
         private Texture2D playerTexture;
         private SpriteSheet playerSpriteSheet;
 
@@ -38,7 +38,7 @@ namespace BulletHellGame
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
             playerTexture = Content.Load<Texture2D>("Player");
             playerSpriteSheet = new SpriteSheet(playerTexture, 1, 6);
             map = new TmxMap("Content/Map/GroupProject.tmx");
@@ -65,7 +65,7 @@ namespace BulletHellGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             mapRenderer.Draw(_spriteBatch,map,tileset,tilesetTilesWide,tileWidth,tileHeight);
-            playerSpriteSheet.Draw(spriteBatch, new Vector2(50, 50));
+            playerSpriteSheet.Draw(_spriteBatch, new Vector2(50, 50));
             base.Draw(gameTime);
         }
     }

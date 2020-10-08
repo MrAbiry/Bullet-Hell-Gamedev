@@ -38,19 +38,22 @@ namespace BulletHellGame
                     currentFrame = 0;
             }
         }
-
-        public void Draw(SpriteBatch spriteBatch, Vector2 location)
+        public void Draw(SpriteBatch spriteBatch, Vector2 drawLocation=new Vector2(), Color? _color =null, float rotation=0, Vector2 origin = new Vector2(), float scale=1, SpriteEffects spriteEffects=SpriteEffects.None, float layerDepth=1)
         {
-            int frameWidth = texture.Width /columns; 
+            //in case the color value wasn't set, it sets the color to be white
+            Color color; 
+            color = _color ?? Color.White; 
+
+            int frameWidth = texture.Width / columns;
             int frameHeight = texture.Height / rows;
             int currentRow = (int)((float)currentFrame / (float)columns);
             int currentColumn = currentFrame % columns;
 
-            Rectangle sourceRectangle = new Rectangle(frameWidth* currentColumn, frameHeight * currentRow, frameWidth, frameHeight);
-            Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, frameWidth, frameHeight);
+            Rectangle sourceRectangle = new Rectangle(frameWidth * currentColumn, frameHeight * currentRow, frameWidth, frameHeight);
+            //Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, frameWidth, frameHeight);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(texture, new Vector2(50, 50), sourceRectangle, Color.White, 0, Vector2.Zero, 5f, SpriteEffects.None, 1);
+            spriteBatch.Draw(texture, drawLocation, sourceRectangle, color, rotation, origin, scale, spriteEffects, layerDepth);
             spriteBatch.End();
         }
     }

@@ -65,7 +65,7 @@ namespace BulletHellGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             mapRenderer.Draw(_spriteBatch,map,tileset,tilesetTilesWide,tileWidth,tileHeight);
-            playerSpriteSheet.Draw(_spriteBatch, new Vector2(50, 50));
+            playerSpriteSheet.Draw(_spriteBatch);
             base.Draw(gameTime);
         }
     }

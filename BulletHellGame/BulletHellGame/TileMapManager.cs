@@ -6,9 +6,25 @@ using System.Text;
 using TiledSharp;
 namespace BulletHellGame
 {
-    class TileMapRenderer
+    public class TileMapManager
     {
-        public void Draw(SpriteBatch _spriteBatch,TmxMap map,Texture2D tileset,int tilesetTilesWide,int tileWidth,int tileHeight)
+        TmxMap map;
+        SpriteBatch _spriteBatch;
+        Texture2D tileset;
+        int tilesetTilesWide;
+        int tileWidth;
+        int tileHeight;
+
+        public TileMapManager(SpriteBatch _spriteBatch, TmxMap map, Texture2D tileset, int tilesetTilesWide, int tileWidth, int tileHeight)
+        {
+            this._spriteBatch = _spriteBatch;
+            this.map = map;
+            this.tileset = tileset;
+            this.tilesetTilesWide = tilesetTilesWide;
+            this.tileWidth = tileWidth;
+            this.tileHeight = tileHeight;
+        }
+        public void Draw()
         {
             _spriteBatch.Begin();
             for (var j = 0; j < map.TileLayers.Count; j++)

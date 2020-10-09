@@ -21,7 +21,7 @@ namespace BulletHellGame
         private int tileWidth;
         private int tileHeight;
         private int tilesetTilesWide;
-        private TileMapRenderer mapRenderer;
+        private TileMapManager mapRenderer;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -32,7 +32,7 @@ namespace BulletHellGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            mapRenderer = new TileMapRenderer();
+            
             base.Initialize();
         }
 
@@ -41,13 +41,13 @@ namespace BulletHellGame
             _spriteBatch = new SpriteBatch(GraphicsDevice);
             playerTexture = Content.Load<Texture2D>("Player");
             playerSpriteSheet = new SpriteSheet(playerTexture, 1, 6);
+
             map = new TmxMap("Content/Map/GroupProject.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
-
             tileWidth = map.Tilesets[0].TileWidth;
             tileHeight = map.Tilesets[0].TileHeight;
-
             tilesetTilesWide = tileset.Width / tileWidth;
+            mapRenderer = new TileMapManager(_spriteBatch, map, tileset, tilesetTilesWide, tileWidth, tileHeight);
             // TODO: use this.Content to load your game content here
         }
 
@@ -64,7 +64,7 @@ namespace BulletHellGame
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-            mapRenderer.Draw(_spriteBatch,map,tileset,tilesetTilesWide,tileWidth,tileHeight);
+            mapRenderer.Draw();
             playerSpriteSheet.Draw(_spriteBatch);
             base.Draw(gameTime);
         }

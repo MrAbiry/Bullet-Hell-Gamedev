@@ -38,7 +38,7 @@ namespace BulletHellGame
                     currentFrame = 0;
             }
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 drawLocation=new Vector2(), Color? _color =null, float rotation=0, Vector2 origin = new Vector2(), float scale=1, SpriteEffects spriteEffects=SpriteEffects.None, float layerDepth=1)
+        public void Draw(SpriteBatch spriteBatch, Matrix transform, Vector2 drawLocation=new Vector2(), Color? _color =null, float rotation=0, Vector2 origin = new Vector2(), float scale=1, SpriteEffects spriteEffects=SpriteEffects.None, float layerDepth=1)
         {
             //in case the color value wasn't set, it sets the color to be white
             Color color; 
@@ -52,7 +52,8 @@ namespace BulletHellGame
             Rectangle sourceRectangle = new Rectangle(frameWidth * currentColumn, frameHeight * currentRow, frameWidth, frameHeight);
             //Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, frameWidth, frameHeight);
 
-            spriteBatch.Begin();
+            // spriteBatch.Begin(transformMatrix:transform);//For the camera matrix uncomment this when the player movement is done
+            spriteBatch.Begin();//remove this after player movement is over
             spriteBatch.Draw(texture, drawLocation, sourceRectangle, color, rotation, origin, scale, spriteEffects, layerDepth);
             spriteBatch.End();
         }

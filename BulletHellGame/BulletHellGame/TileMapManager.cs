@@ -14,8 +14,8 @@ namespace BulletHellGame
         int tilesetTilesWide;
         int tileWidth;
         int tileHeight;
-
-        public TileMapManager(SpriteBatch _spriteBatch, TmxMap map, Texture2D tileset, int tilesetTilesWide, int tileWidth, int tileHeight)
+        Matrix transform;
+        public TileMapManager(SpriteBatch _spriteBatch, TmxMap map, Texture2D tileset, int tilesetTilesWide, int tileWidth, int tileHeight,Matrix transform)
         {
             this._spriteBatch = _spriteBatch;
             this.map = map;
@@ -23,10 +23,12 @@ namespace BulletHellGame
             this.tilesetTilesWide = tilesetTilesWide;
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
+            this.transform = transform;
         }
         public void Draw()
         {
-            _spriteBatch.Begin();
+            // _spriteBatch.Begin(transformMatrix:transform);//for camera matrix uncooment this after player movement is over
+            _spriteBatch.Begin();//remove this after player movement is over
             for (var j = 0; j < map.TileLayers.Count; j++)
             {
                 for (var i = 0; i < map.TileLayers[j].Tiles.Count; i++)

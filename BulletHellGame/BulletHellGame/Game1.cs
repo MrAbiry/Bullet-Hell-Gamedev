@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Aurora;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -21,7 +22,10 @@ namespace BulletHellGame
         private int tileWidth;
         private int tileHeight;
         private int tilesetTilesWide;
+        private int screenWidth;
+        private int screenHeight;
         private TileMapManager mapRenderer;
+        private Camera cam;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -32,7 +36,9 @@ namespace BulletHellGame
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            
+            screenWidth = graphics.PreferredBackBufferWidth;
+            screenHeight = graphics.PreferredBackBufferHeight;
+            cam = new Camera();
             base.Initialize();
         }
 
@@ -47,7 +53,7 @@ namespace BulletHellGame
             tileWidth = map.Tilesets[0].TileWidth;
             tileHeight = map.Tilesets[0].TileHeight;
             tilesetTilesWide = tileset.Width / tileWidth;
-            mapRenderer = new TileMapManager(_spriteBatch, map, tileset, tilesetTilesWide, tileWidth, tileHeight);
+            mapRenderer = new TileMapManager(_spriteBatch, map, tileset, tilesetTilesWide, tileWidth, tileHeight,cam.transform);
             // TODO: use this.Content to load your game content here
         }
 
@@ -56,8 +62,8 @@ namespace BulletHellGame
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             playerSpriteSheet.Update();
-            // TODO: Add your update logic here
             
+            //cam.Follow(Vector2,screenWidth,screenHeight);//Uncomment and replace Vector2 with player position
             base.Update(gameTime);
         }
 
@@ -65,7 +71,7 @@ namespace BulletHellGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             mapRenderer.Draw();
-            playerSpriteSheet.Draw(_spriteBatch);
+            playerSpriteSheet.Draw(_spriteBatch,cam.transform);
             base.Draw(gameTime);
         }
     }

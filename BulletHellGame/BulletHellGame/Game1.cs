@@ -11,17 +11,22 @@ namespace BulletHellGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch _spriteBatch;
-        private Texture2D playerTexture;
-        private SpriteSheet playerSpriteSheet;
-
+        private SpriteSheet playerMoveUp;
+        private SpriteSheet playerMoveDown;
+        private SpriteSheet playerMoveLeft;
+        private SpriteSheet playerMoveRight;
+        private SpriteSheet playerMoveIdle;
 
         private TmxMap map;
         private Texture2D tileset;
-
         private int tileWidth;
         private int tileHeight;
         private int tilesetTilesWide;
         private TileMapManager mapRenderer;
+
+        public InputManager inputManager;
+
+        public Player player;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,9 +44,15 @@ namespace BulletHellGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            playerTexture = Content.Load<Texture2D>("Player");
-            playerSpriteSheet = new SpriteSheet(playerTexture, 1, 6);
+            playerMoveUp = new SpriteSheet(Content.Load<Texture2D>("Player/playerMoveUp"), 1, 6);
+            playerMoveDown = new SpriteSheet(Content.Load<Texture2D>("Player/playerMoveDown"), 1, 6);
+            playerMoveLeft = new SpriteSheet(Content.Load<Texture2D>("Player/playerMoveLeft"), 1, 6);
+            playerMoveRight = new SpriteSheet(Content.Load<Texture2D>("Player/playerMoveRight"), 1, 6);
+            playerMoveIdle = new SpriteSheet(Content.Load<Texture2D>("Player/playerMoveIdle"), 1, 6);
 
+            inputManager = new InputManager();
+            Player _player = new Player(_spriteBatch, inputManager, new Vector2(), 7, playerMoveUp, playerMoveDown, playerMoveLeft, playerMoveRight, playerMoveIdle); //I don't know why, but it gives a null error if i directly assign new instance to player... so instead I am pointing player to _player
+            player = _player;
             map = new TmxMap("Content/Map/GroupProject.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
             tileWidth = map.Tilesets[0].TileWidth;
@@ -55,9 +66,9 @@ namespace BulletHellGame
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            playerSpriteSheet.Update();
+            inputManager.Update();
             // TODO: Add your update logic here
-            
+            player.Update();
             base.Update(gameTime);
         }
 
@@ -65,7 +76,7 @@ namespace BulletHellGame
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             mapRenderer.Draw();
-            playerSpriteSheet.Draw(_spriteBatch);
+            player.Draw();
             base.Draw(gameTime);
         }
     }

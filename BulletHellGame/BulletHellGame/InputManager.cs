@@ -98,9 +98,9 @@ namespace BulletHellGame
             if (keyboardState.IsKeyDown(downMove))
                 moveY += 1;
             if (keyboardState.IsKeyDown(leftMove))
-                moveX += 1;
-            if (keyboardState.IsKeyDown(rightMove))
                 moveX -= 1;
+            if (keyboardState.IsKeyDown(rightMove))
+                moveX += 1;
             return new Vector2(moveX, moveY);
 
         }

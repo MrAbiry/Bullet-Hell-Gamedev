@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TiledSharp;
+using System.Collections.ObjectModel;
 namespace BulletHellGame
 {
     public class TileMapManager
@@ -15,6 +16,7 @@ namespace BulletHellGame
         int tileWidth;
         int tileHeight;
 
+        
         public TileMapManager(SpriteBatch _spriteBatch, TmxMap map, Texture2D tileset, int tilesetTilesWide, int tileWidth, int tileHeight)
         {
             this._spriteBatch = _spriteBatch;
@@ -24,6 +26,24 @@ namespace BulletHellGame
             this.tileWidth = tileWidth;
             this.tileHeight = tileHeight;
         }
+        public int getTileIndexFromPos(Vector2 absolutePosition) // inputs a location paramater, and returns the index of the tile at that specified point. index is zero-based
+        {
+            return (int)(absolutePosition.X/tileHeight + absolutePosition.Y/tileHeight * map.Width);
+        }
+        public int getTileIndexFromPos(int x, int y)
+        {
+            return x/tileHeight + y/tileHeight * map.Width;
+        }
+        public int GetTileIDFromIndex(int tileIndex) // returns the gid of first tile that isnt empty (searches layers from top to bottom)
+        {
+            for (var j = map.TileLayers.Count-1; j == 0; j--)
+            {
+                if (map.TileLayers[j].Tiles[tileIndex].Gid != 0)
+                    return map.TileLayers[j].Tiles[tileIndex].Gid;
+            }
+            return 0; // if no tile was found at that specific location
+        }
+
         public void Draw()
         {
             _spriteBatch.Begin();
@@ -32,15 +52,9 @@ namespace BulletHellGame
                 for (var i = 0; i < map.TileLayers[j].Tiles.Count; i++)
                 {
                     int gid = map.TileLayers[j].Tiles[i].Gid;
-
-                    // Empty tile, do nothing
-                    if (gid == 0)
+                    if (gid != 0)
                     {
-
-                    }
-                    else
-                    {
-                        int tileFrame = gid - 1;
+                        int tileFrame = gid - 1; //tileset id is zero-based index
                         int column = tileFrame % tilesetTilesWide;
                         int row = (int)Math.Floor((double)tileFrame / (double)tilesetTilesWide);
 

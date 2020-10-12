@@ -22,16 +22,15 @@ namespace BulletHellGame
         public int movespeed {get; set;}
         Vector2 moveAngle { get; set; }
         public SpriteSheet[] spriteSheets { get; set; }
+        public SpriteSheet spriteSheet;
         public MoveDirection moveDirection { get; set; }
-        
-
-        public Player(SpriteBatch spriteBatch, InputManager inputManager, Vector2 position, int movespeed, SpriteSheet moveUp,SpriteSheet moveDown,SpriteSheet moveLeft,SpriteSheet moveRight,SpriteSheet moveIdle)
+               public Player(SpriteBatch spriteBatch, InputManager inputManager, Vector2 position, int movespeed, SpriteSheet spriteSheet)
         {
             this.spriteBatch = spriteBatch;
             this.inputManager = inputManager;
             this.position = position;
             this.movespeed = movespeed;
-            spriteSheets = new SpriteSheet[] { moveUp, moveDown, moveLeft, moveRight, moveIdle };
+            this.spriteSheet = spriteSheet;
             moveDirection = MoveDirection.moveIdle;
             moveAngle = inputManager.GetPlayerMoveDirection();
         }
@@ -45,19 +44,21 @@ namespace BulletHellGame
         }
         public Vector2 MoveTo() // I am returning a vector instead of directly setting the new pos, because later I will run this through a collision checker first
         {
+            moveAngle.Normalize();
             Vector2 moveBy = Vector2.Multiply(moveAngle, (float)movespeed);
-            return new Vector2(position.X + (int)moveBy.X, position.Y + (int)moveBy.Y);
+            Vector2 targetpos = new Vector2(position.X + (int)moveBy.X, position.Y + (int)moveBy.Y);
+            return targetpos;
         }
         public void Update()
         {
             moveAngle = inputManager.GetPlayerMoveDirection();
             moveDirection = GetMoveDirection();
             position = MoveTo();
-            spriteSheets[(int)moveDirection].Update();
+            spriteSheet.Update();
         }
         public void Draw()
         {
-            spriteSheets[(int)moveDirection].Draw(spriteBatch, position);
+            spriteSheet.Draw(spriteBatch, position,(int)moveDirection);
         }
     }
 }

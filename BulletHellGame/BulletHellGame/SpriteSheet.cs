@@ -9,22 +9,25 @@ namespace BulletHellGame
     public class SpriteSheet
     {
         public Texture2D texture { get; set; }
-        public int updateSpeed {get; set;} // number of Updates() before animation moves to next frame.
+        public int updateSpeed { get; set; } // number of Updates() before animation moves to next frame.
         private int updateCounter;
         public int rows { get; set; }
         public int columns { get; set; }
         private int currentFrame;
-        private int totalFrames;
+        public int rowToDraw {get; set;} //zero-based index
         
-        public SpriteSheet(Texture2D texture, int rows, int columns, int updateSpeed=7) 
+        public SpriteSheet(Texture2D texture, int rows, int columns, int rowToDraw=0, int updateSpeed=7) 
         {
             this.texture = texture;
-            this.rows = rows;
-            this.columns = columns;
+            this.rows = rows; // not zero indexed
+            this.columns = columns; // not zero indexed
             this.updateSpeed = updateSpeed;
             updateCounter = updateSpeed;
             currentFrame = 0;
-            totalFrames = rows * columns;
+
+            if (rowToDraw > rows - 1) // sets default in case of out of bounds
+                this.rowToDraw = 0;
+            else this.rowToDraw = rowToDraw;
         }
         public void Update()
         {
@@ -34,22 +37,23 @@ namespace BulletHellGame
                 updateCounter = updateSpeed; //resets time until next frame
 
                 currentFrame++;
-                if (currentFrame == totalFrames)
-                    currentFrame = 0;
+                if (currentFrame == columns - 1) //subtracting 1 because currentFrame is zero-based index. columns is not.
+                    currentFrame = rowToDraw*columns; // resets to first frame in the row, if frame reached end of row
             }
         }
-        public void Draw(SpriteBatch spriteBatch, Vector2 drawLocation=new Vector2(), Color? _color =null, float rotation=0, Vector2 origin = new Vector2(), float scale=1, SpriteEffects spriteEffects=SpriteEffects.None, float layerDepth=1)
+        public void Draw(SpriteBatch spriteBatch, Vector2 drawLocation=new Vector2(), int? _rowToDraw=null, Color? _color =null, float rotation=0, Vector2 origin = new Vector2(), float scale=1, SpriteEffects spriteEffects=SpriteEffects.None, float layerDepth=1)
         {
             //in case the color value wasn't set, it sets the color to be white
             Color color; 
-            color = _color ?? Color.White; 
+            color = _color ?? Color.White;
+            rowToDraw = _rowToDraw ?? rowToDraw;
 
             int frameWidth = texture.Width / columns;
             int frameHeight = texture.Height / rows;
-            int currentRow = (int)((float)currentFrame / (float)columns);
+            //int currentRow = (int)((float)currentFrame / (float)columns);
             int currentColumn = currentFrame % columns;
 
-            Rectangle sourceRectangle = new Rectangle(frameWidth * currentColumn, frameHeight * currentRow, frameWidth, frameHeight);
+            Rectangle sourceRectangle = new Rectangle(frameWidth * currentColumn, frameHeight * rowToDraw, frameWidth, frameHeight);
             //Rectangle destinationRectangle = new Rectangle((int)location.X, (int)location.Y, frameWidth, frameHeight);
 
             spriteBatch.Begin();

@@ -11,11 +11,6 @@ namespace BulletHellGame
     {
         private GraphicsDeviceManager graphics;
         private SpriteBatch _spriteBatch;
-        private SpriteSheet playerMoveUp;
-        private SpriteSheet playerMoveDown;
-        private SpriteSheet playerMoveLeft;
-        private SpriteSheet playerMoveRight;
-        private SpriteSheet playerMoveIdle;
         private SpriteSheet playerSheet;
 
         private TmxMap map;
@@ -45,17 +40,19 @@ namespace BulletHellGame
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
-            playerSheet = new SpriteSheet(Content.Load<Texture2D>("Player/playerSheet"), 5, 6);
-
-            inputManager = new InputManager();
-            Player _player = new Player(_spriteBatch, inputManager, new Vector2(), 3,playerSheet); //I don't know why, but it gives a null error if i directly assign new instance to player... so instead I am pointing player to _player
-            player = _player;
+            
             map = new TmxMap("Content/Map/GroupProject.tmx");
             tileset = Content.Load<Texture2D>(map.Tilesets[0].Name.ToString());
             tileWidth = map.Tilesets[0].TileWidth;
             tileHeight = map.Tilesets[0].TileHeight;
             tilesetTilesWide = tileset.Width / tileWidth;
             mapRenderer = new TileMapManager(_spriteBatch, map, tileset, tilesetTilesWide, tileWidth, tileHeight);
+
+            inputManager = new InputManager();
+            playerSheet = new SpriteSheet(Content.Load<Texture2D>("Player/playerSheet"), 5, 6);
+            Player _player = new Player(_spriteBatch, inputManager, mapRenderer, new Vector2(), 3,playerSheet); //I don't know why, but it gives a null error if i directly assign new instance to player... so instead I am pointing player to _player
+            player = _player;
+            
             // TODO: use this.Content to load your game content here
         }
 

@@ -15,7 +15,9 @@ namespace BulletHellGame
         public int columns { get; set; }
         private int currentFrame;
         public int rowToDraw {get; set;} //zero-based index
-        
+        public int frameWidth;
+        public int frameHeight;
+
         public SpriteSheet(Texture2D texture, int rows, int columns, int rowToDraw=0, int updateSpeed=7) 
         {
             this.texture = texture;
@@ -28,6 +30,9 @@ namespace BulletHellGame
             if (rowToDraw > rows - 1) // sets default in case of out of bounds
                 this.rowToDraw = 0;
             else this.rowToDraw = rowToDraw;
+
+            frameWidth = texture.Width / columns;
+            frameHeight = texture.Height / rows;
         }
         public void Update()
         {
@@ -48,8 +53,6 @@ namespace BulletHellGame
             color = _color ?? Color.White;
             rowToDraw = _rowToDraw ?? rowToDraw;
 
-            int frameWidth = texture.Width / columns;
-            int frameHeight = texture.Height / rows;
             //int currentRow = (int)((float)currentFrame / (float)columns);
             int currentColumn = currentFrame % columns;
 
